@@ -1,9 +1,29 @@
 {
   "deploy_settings": {
     "default": {
-      "skill_id": "",
+      "skill_id": "amzn1.ask.skill.27475f49-2d2b-445d-9bee-5cd79fa0a08a",
       "was_cloned": false,
-      "merge": {}
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "arn:aws:lambda:us-east-1:558709501430:function:hello-world-alexa-skill-dev-skill"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "manifest": {
+          "eTag": "f601b58e516f2716e4e1ef0c7e36f65d"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "ba4513016605e189b35d1916b113167c"
+          }
+        }
+      }
     }
   }
 }

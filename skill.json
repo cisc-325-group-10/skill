@@ -9,7 +9,7 @@
             "hello",
             "help"
           ],
-          "name": "Hello World",
+          "name": "skill-sample-nodejs-hello-world",
           "description": "Sample Full Description"
         }
       },
@@ -17,14 +17,6 @@
       "testingInstructions": "Sample Testing Instructions.",
       "category": "KNOWLEDGE_AND_TRIVIA",
       "distributionCountries": []
-    },
-    "apis": {
-      "custom": {
-        "endpoint": {
-          "sourceDir": "lambda/custom",
-          "uri": "ask-custom-helloworld-default"
-        }
-      }
     },
     "manifestVersion": "1.0"
   }
