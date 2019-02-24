@@ -1,6 +1,4 @@
-/* eslint-disable  func-names */
-/* eslint-disable  no-console */
-
+import "source-map-support/register";
 const Alexa = require('ask-sdk-core');
 
 const LaunchRequestHandler = {
@@ -92,7 +90,7 @@ const ErrorHandler = {
 
 const skillBuilder = Alexa.SkillBuilders.custom();
 
-exports.handler = skillBuilder
+export const handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
     HelloWorldIntentHandler,

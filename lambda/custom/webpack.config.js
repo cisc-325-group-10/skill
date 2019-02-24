@@ -1,20 +1,21 @@
 const slsw = require('serverless-webpack');
-const WebpackBinPermission = require('./webpack-bin-permissions')
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
     entry: slsw.lib.entries,
     mode: 'production',
-    plugins: [new WebpackBinPermission()],
+    externals: [nodeExternals()],
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.ts$/,
                 use: {
                     loader: 'babel-loader',
                 },
             },
         ],
     },
+    devtool: "source-map",
     stats: 'minimal',
     target: 'node',
 };

@@ -17,6 +17,7 @@ functions:
 
 plugins:
   - serverless-webpack
+  - serverless-plugin-webpack-permission
 custom:
   webpack:
     includeModules: true # Node modules configuration for packaging
