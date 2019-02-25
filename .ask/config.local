@@ -8,15 +8,17 @@
           "apis": {
             "custom": {
               "endpoint": {
-                "uri": "arn:aws:lambda:us-east-1:558709501430:function:hello-world-alexa-skill-dev-skill"
-              }
+                "uri": "https://76052847.ngrok.io",
+                "sslCertificateType": "Wildcard"
+              },
+              "interfaces": []
             }
           }
         }
       },
       "resources": {
         "manifest": {
-          "eTag": "f601b58e516f2716e4e1ef0c7e36f65d"
+          "eTag": "f94a22de5c59dfab81109651a2acaaf6"
         },
         "interactionModel": {
           "en-US": {

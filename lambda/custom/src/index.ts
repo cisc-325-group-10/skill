@@ -1,11 +1,13 @@
 import "source-map-support/register";
-const Alexa = require('ask-sdk-core');
+import * as Alexa from 'ask-sdk-core';
+import { HandlerInput } from 'ask-sdk-core';
+import { Response, SessionEndedRequest } from 'ask-sdk-model';
 
 const LaunchRequestHandler = {
-  canHandle(handlerInput) {
+  canHandle(handlerInput: HandlerInput): boolean {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
-  handle(handlerInput) {
+  handle(handlerInput: HandlerInput): Response {
     const speechText = 'Welcome to the Alexa Skills Kit, you can say hello!';
 
     return handlerInput.responseBuilder
@@ -17,11 +19,11 @@ const LaunchRequestHandler = {
 };
 
 const HelloWorldIntentHandler = {
-  canHandle(handlerInput) {
+  canHandle(handlerInput: HandlerInput): boolean {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
   },
-  handle(handlerInput) {
+  handle(handlerInput: HandlerInput): Response {
     const speechText = 'Hello World!';
 
     return handlerInput.responseBuilder
@@ -32,11 +34,11 @@ const HelloWorldIntentHandler = {
 };
 
 const HelpIntentHandler = {
-  canHandle(handlerInput) {
+  canHandle(handlerInput: HandlerInput): boolean {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
-  handle(handlerInput) {
+  handle(handlerInput: HandlerInput): Response {
     const speechText = 'You can say hello to me!';
 
     return handlerInput.responseBuilder
@@ -48,12 +50,12 @@ const HelpIntentHandler = {
 };
 
 const CancelAndStopIntentHandler = {
-  canHandle(handlerInput) {
+  canHandle(handlerInput: HandlerInput): boolean {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && (handlerInput.requestEnvelope.request.intent.name === 'AMAZON.CancelIntent'
         || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
   },
-  handle(handlerInput) {
+  handle(handlerInput: HandlerInput): Response {
     const speechText = 'Goodbye!';
 
     return handlerInput.responseBuilder
@@ -64,21 +66,21 @@ const CancelAndStopIntentHandler = {
 };
 
 const SessionEndedRequestHandler = {
-  canHandle(handlerInput) {
+  canHandle(handlerInput: HandlerInput): boolean {
     return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
   },
-  handle(handlerInput) {
-    console.log(`Session ended with reason: ${handlerInput.requestEnvelope.request.reason}`);
+  handle(handlerInput: HandlerInput): Response {
+    console.log(`Session ended with reason: ${((handlerInput.requestEnvelope.request) as SessionEndedRequest).reason}`);
 
     return handlerInput.responseBuilder.getResponse();
   },
 };
 
 const ErrorHandler = {
-  canHandle() {
+  canHandle(): boolean {
     return true;
   },
-  handle(handlerInput, error) {
+  handle(handlerInput: HandlerInput, error: any): Response {
     console.log(`Error handled: ${error.message}`);
 
     return handlerInput.responseBuilder

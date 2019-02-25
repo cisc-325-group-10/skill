@@ -1,27 +1,234 @@
 {
-  "interactionModel": {
-    "languageModel": {
-      "invocationName": "hello world",
-      "intents": [
-        {
-          "name": "AMAZON.CancelIntent",
-          "samples": []
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "unity light",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "FlipSwitchIntent",
+                    "slots": [
+                        {
+                            "name": "State",
+                            "type": "States"
+                        }
+                    ],
+                    "samples": [
+                        "turn light {State}",
+                        "turn {State}",
+                        "turn {State} light"
+                    ]
+                },
+                {
+                    "name": "ChangeColorIntent",
+                    "slots": [
+                        {
+                            "name": "Color",
+                            "type": "AMAZON.Color",
+                            "samples": [
+                                "Change box to {Color}",
+                                "{Color}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Change light",
+                        "Change light color to {Color}",
+                        "Change light color",
+                        "Change color of light to {Color}",
+                        "Change color to {Color}",
+                        "Change color",
+                        "Change color of light",
+                        "Switch light",
+                        "Switch light color to {Color}",
+                        "Switch light color",
+                        "Switch color of light to {Color}",
+                        "Switch color to {Color}",
+                        "Switch color",
+                        "Switch color of light"
+                    ]
+                },
+                {
+                    "name": "GetColorIntent",
+                    "slots": [],
+                    "samples": [
+                        "Color",
+                        "Current color",
+                        "Box color",
+                        "What color is the box"
+                    ]
+                },
+                {
+                    "name": "GetObjectInDirectionIntent",
+                    "slots": [
+                        {
+                            "name": "Direction",
+                            "type": "Directions",
+                            "samples": [
+                                "{Direction} of me",
+                                "{Direction}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "What is to the {Direction} of me",
+                        "What is to the {Direction}",
+                        "What's directly {Direction} of me",
+                        "What's {Direction} of me",
+                        "What's to the {Direction}",
+                        "What is directly {Direction} of me",
+                        "What is {Direction} of me"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "States",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "off"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "on"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Colors",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "white"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "red"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "green"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "yellow"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "blue"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Directions",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "right"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "left"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "backward",
+                                "synonyms": [
+                                    "behind"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "forward",
+                                "synonyms": [
+                                    "in front"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
         },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": []
+        "dialog": {
+            "intents": [
+                {
+                    "name": "ChangeColorIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Color",
+                            "type": "AMAZON.Color",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1410556711840.764264366583"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GetObjectInDirectionIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Direction",
+                            "type": "Directions",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1046955933448.185670337202"
+                            }
+                        }
+                    ]
+                }
+            ]
         },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": []
-        },
-        {
-          "name": "HelloWorldIntent",
-          "samples": [
-            "hello"
-          ]
-        }
-      ]
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1410556711840.764264366583",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What color do you want the box to be?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Which color?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1046955933448.185670337202",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What direction?"
+                    }
+                ]
+            }
+        ]
     }
-  }
 }
