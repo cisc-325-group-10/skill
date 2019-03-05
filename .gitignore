@@ -2,3 +2,5 @@
 lambda/custom/node_modules/
 
 lambda/custom/\.serverless/
+
+\.vscode/

@@ -4,7 +4,7 @@ var AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-east-1' });
 var alexaCookbook = require('./alexa-cookbook.js');
 var alexaPlusUnityClass = require('alexaplusunity');
-var alexaPlusUnity = new alexaPlusUnityClass("pub-c-abdd3334-f90f-4052-88f4-8a346073b8c2", "sub-c-8cbc8f28-3895-11e9-9428-feac5d404e24", true);
+var alexaPlusUnity = new alexaPlusUnityClass("pub-c-6592a63e-134f-4327-9ed7-b2f36a38b8b2", "sub-c-6ba13e32-38a0-11e9-b5cf-1e59042875b2", true);
 
 const speechOutputs = {
     launch: {
