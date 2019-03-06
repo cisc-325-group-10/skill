@@ -1,0 +1,124 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "blue firetruck",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name":"StartGameIntent",
+                    "samples":[
+                        "start the game",
+                        "start game",
+                        "start"
+                    ]
+                },
+                {
+                    "name":"MathGameAnswer",
+                    "slots": [
+                        {
+                            "name": "Answer",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples":[
+                        "my anwser is {Answer}",
+                        "answer {Answer}",
+                        "answer is {Answer}"
+                    ]
+                },
+                {
+                    "name":"NextGame",
+                    "samples":[
+                        "move to next game",
+                        "move to the next game",
+                        "move on",
+                        "advance",
+                        "next game",
+                        "next"
+                    ]
+                },
+                {
+                    "name":"ColorGameAnswer",
+                    "slots": [
+                        {
+                            "name": "Color1",
+                            "type": "Colors"
+                        },
+                        {
+                            "name": "Color2",
+                            "type": "Colors"
+                        },
+                        {
+                            "name": "Color3",
+                            "type": "Colors"
+                        },
+                        {
+                            "name": "Color4",
+                            "type": "Colors"
+                        },
+                        {
+                            "name": "Color5",
+                            "type": "Colors"
+                        }
+                    ],
+                    "samples":[
+                        "{Color1} {Color2} {Color3} {Color4} {Color5}",
+                        "the colors are {Color1} {Color2} {Color3} {Color4} {Color5}",
+                        "colors {Color1} {Color2} {Color3} {Color4} {Color5}"
+                    ]
+                },
+                {
+                    "name": "Colors",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "white"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "red"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "green"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "yellow"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "blue"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "grey"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gray"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+}
+}
