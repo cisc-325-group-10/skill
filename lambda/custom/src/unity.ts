@@ -43,7 +43,10 @@ const LaunchRequestHandler = {
             .reprompt(reprompt)
             .getResponse();
 
-        if (attributes.SETUP_STATE == "STARTED") {
+        // Unity getting message history doesn't work right now
+        // this means an established session cant't be joined by unity
+        // so we are just going to go though the startup process every time for now
+        if (attributes.SETUP_STATE == "STARTED" || true) {
             var launchSetUpResult = await launchSetUp(reprompt, handlerInput, attributes);
             attributes = launchSetUpResult.attributes;
             response = launchSetUpResult.response;
@@ -62,194 +65,48 @@ const StartGameIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'StartGameIntent';
     },
     async handle(handlerInput) {
-
-        const attributes = await handlerInput.attributesManager.getPersistentAttributes()
-        const payloadObj = {
+        return await sendUnityMessage({
             type: "StartRequest"
-        };
+        }, "What's next?", handlerInput);
 
-        const response = await alexaPlusUnity.publishMessageAndListenToResponse(payloadObj, attributes.PUBNUB_CHANNEL, 4000).then((data) => {
-            const speechText = data.message;
-            const reprompt = " What's next?";
-            return handlerInput.responseBuilder
-                .speak(speechText)
-                .reprompt(reprompt)
-                .getResponse();
-        }).catch((err) => {
-            return ErrorHandler.handle(handlerInput, err);
-        });
+    }
+}
 
-        return response;
+const NextGameIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'NextGame';
+    },
+    async handle(handlerInput) {
+        return await sendUnityMessage({
+            type: "NextGameRequest"
+        }, "What's next?", handlerInput);
+
     }
 }
 
 
-const InProgressFlipSwitchIntentHandler = {
-    canHandle(handlerInput: HandlerInput) {
-        const request = handlerInput.requestEnvelope.request;
-        return request.type === 'IntentRequest' &&
-            request.intent.name === 'FlipSwitchIntent' &&
-            request.dialogState !== 'COMPLETED';
-    },
-    handle(handlerInput) {
-        const currentIntent = handlerInput.requestEnvelope.request.intent;
-        return handlerInput.responseBuilder
-            .addDelegateDirective(currentIntent)
-            .getResponse();
-    },
-}
-
-const CompletetedFlipSwitchIntentHandler = {
+const MathGameAnswerIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'FlipSwitchIntent';
+            && handlerInput.requestEnvelope.request.intent.name === 'MathGameAnswer';
     },
     async handle(handlerInput) {
-        const state = handlerInput.requestEnvelope.request.intent.slots.State.value;
-
-        const speechText = 'Light is now ' + state + '!';
-        const reprompt = ' What\'s next?';
-
-        var attributes = await handlerInput.attributesManager.getPersistentAttributes()
-
-        var payloadObj = {
-            type: "State",
-            message: state
-        };
-
-        var response = await alexaPlusUnity.publishMessage(payloadObj, attributes.PUBNUB_CHANNEL).then((data) => {
-            return handlerInput.responseBuilder
-                .speak(speechText + reprompt)
-                .reprompt(reprompt)
-                .getResponse();
-        }).catch((err) => {
-            return ErrorHandler.handle(handlerInput, err);
-        });
-        return response;
+        const answer = handlerInput.requestEnvelope.request.intent.slots.Answer.value;
+        const payload = { type: "MathGameAnswer", answer: answer };
+        return await sendUnityMessage(payload, "What's your answer?", handlerInput);
     }
 };
 
-const InProgressChangeColorIntentHandler = {
-    canHandle(handlerInput) {
-        const request = handlerInput.requestEnvelope.request;
-        return request.type === 'IntentRequest' &&
-            request.intent.name === 'ChangeColorIntent' &&
-            request.dialogState !== 'COMPLETED';
-    },
-    handle(handlerInput) {
-        const currentIntent = handlerInput.requestEnvelope.request.intent;
-        return handlerInput.responseBuilder
-            .addDelegateDirective(currentIntent)
-            .getResponse();
-    },
-}
-
-const CompletedChangeColorIntentHandler = {
-    canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'ChangeColorIntent';
-    },
-    async handle(handlerInput) {
-        const color = handlerInput.requestEnvelope.request.intent.slots.Color.value;
-
-        const speechText = 'Light is now ' + color + '!';
-        const reprompt = ' What\'s next?';
-
-        var attributes = await handlerInput.attributesManager.getPersistentAttributes();
-
-        var payloadObj = {
-            type: "Color",
-            message: color
-        };
-
-        var response = await alexaPlusUnity.publishMessage(payloadObj, attributes.PUBNUB_CHANNEL).then((data) => {
-            return handlerInput.responseBuilder
-                .speak(speechText + reprompt)
-                .reprompt(reprompt)
-                .getResponse();
-        }).catch((err) => {
-            return ErrorHandler.handle(handlerInput, err);
-        });
-
-        return response;
-    },
-};
-
-const GetColorIntentHandler = {
-    canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'GetColorIntent';
-    },
-    async handle(handlerInput) {
-        var attributes = await handlerInput.attributesManager.getPersistentAttributes();
-
-        const speechText = 'The light is currently ' + attributes.color + '!';
-        const reprompt = ' What\'s next?';
-
-        return handlerInput.responseBuilder
-            .speak(speechText + reprompt)
-            .reprompt(reprompt)
-            .getResponse();
-    }
-}
-
-const InProgressGetObjectInDirectionIntentHandler = {
-    canHandle(handlerInput) {
-        const request = handlerInput.requestEnvelope.request;
-        return request.type === 'IntentRequest' &&
-            request.intent.name === 'GetObjectInDirectionIntent' &&
-            request.dialogState !== 'COMPLETED';
-    },
-    handle(handlerInput) {
-        const currentIntent = handlerInput.requestEnvelope.request.intent;
-        return handlerInput.responseBuilder
-            .addDelegateDirective(currentIntent)
-            .getResponse();
-    },
-}
-
-const CompletedGetObjectInDirectionIntentHandler = {
-    canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'GetObjectInDirectionIntent';
-    },
-    async handle(handlerInput) {
-        const direction = handlerInput.requestEnvelope.request.intent.slots.Direction.value;
-        var attributes = await handlerInput.attributesManager.getPersistentAttributes();
-
-        var payloadObj = {
-            type: "GetObject",
-            message: direction
-        };
-
-        var response = await alexaPlusUnity.publishMessageAndListenToResponse(payloadObj, attributes.PUBNUB_CHANNEL, 4000).then((data) => {
-            const speechText = 'Currently, ' + data.message.object + ' is ' + direction + ' you!';
-            const reprompt = ' What\'s next?';
-            return handlerInput.responseBuilder
-                .speak(speechText + reprompt)
-                .reprompt(reprompt)
-                .getResponse();
-        }).catch((err) => {
-            return ErrorHandler.handle(handlerInput, err);
-        });
-
-        return response;
-    }
-}
 
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
             && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
     },
-    handle(handlerInput) {
-        const speechText = 'You can say turn on to turn on the pump!';
-
-        return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
-            .withSimpleCard('Alexa Plus Unity Test', speechText)
-            .getResponse();
+    async handle(handlerInput) {
+        const payload = { type: "HelpRequest" };
+        return await sendUnityMessage(payload, null, handlerInput);
     },
 };
 
@@ -279,6 +136,7 @@ const SessionEndedRequestHandler = {
     },
 };
 
+
 const ErrorHandler = {
     canHandle() {
         return true;
@@ -301,13 +159,8 @@ export const handler = skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
         StartGameIntentHandler,
-        InProgressFlipSwitchIntentHandler,
-        CompletetedFlipSwitchIntentHandler,
-        InProgressChangeColorIntentHandler,
-        CompletedChangeColorIntentHandler,
-        GetColorIntentHandler,
-        InProgressGetObjectInDirectionIntentHandler,
-        CompletedGetObjectInDirectionIntentHandler,
+        NextGameIntentHandler,
+        MathGameAnswerIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler
@@ -316,6 +169,22 @@ export const handler = skillBuilder
     .withTableName('AlexaPlusUnityTest')
     .withAutoCreateTable(true)
     .lambda();
+
+
+async function sendUnityMessage(payload: any, reprompt: string | null, handler: HandlerInput) {
+    const attributes = await handler.attributesManager.getPersistentAttributes();
+    const response = await alexaPlusUnity.publishMessageAndListenToResponse(payload, attributes.PUBNUB_CHANNEL, 4000).then((data) => {
+        const speechText = data.message;
+        return handler.responseBuilder
+            .speak(speechText)
+            .reprompt(reprompt ? reprompt : speechText)
+            .getResponse();
+    }).catch((err) => {
+        return ErrorHandler.handle(handler, err);
+    });
+    return response;
+}
+
 
 async function launchSetUp(reprompt, handlerInput, attributes) {
     const responseBuilder = handlerInput.responseBuilder;
