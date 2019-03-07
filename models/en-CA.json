@@ -16,30 +16,30 @@
                     "samples": []
                 },
                 {
-                    "name":"StartGameIntent",
-                    "samples":[
+                    "name": "StartGameIntent",
+                    "samples": [
                         "start the game",
                         "start game",
                         "start"
                     ]
                 },
                 {
-                    "name":"MathGameAnswer",
+                    "name": "MathGameAnswer",
                     "slots": [
                         {
                             "name": "Answer",
                             "type": "AMAZON.NUMBER"
                         }
                     ],
-                    "samples":[
+                    "samples": [
                         "my anwser is {Answer}",
                         "answer {Answer}",
                         "answer is {Answer}"
                     ]
                 },
                 {
-                    "name":"NextGame",
-                    "samples":[
+                    "name": "NextGame",
+                    "samples": [
                         "move to next game",
                         "move to the next game",
                         "move on",
@@ -49,35 +49,37 @@
                     ]
                 },
                 {
-                    "name":"ColorGameAnswer",
+                    "name": "ColorGameAnswer",
                     "slots": [
                         {
-                            "name": "Color1",
+                            "name": "ColorA",
                             "type": "Colors"
                         },
                         {
-                            "name": "Color2",
+                            "name": "ColorB",
                             "type": "Colors"
                         },
                         {
-                            "name": "Color3",
+                            "name": "ColorC",
                             "type": "Colors"
                         },
                         {
-                            "name": "Color4",
+                            "name": "ColorD",
                             "type": "Colors"
                         },
                         {
-                            "name": "Color5",
+                            "name": "ColorE",
                             "type": "Colors"
                         }
                     ],
-                    "samples":[
-                        "{Color1} {Color2} {Color3} {Color4} {Color5}",
-                        "the colors are {Color1} {Color2} {Color3} {Color4} {Color5}",
-                        "colors {Color1} {Color2} {Color3} {Color4} {Color5}"
+                    "samples": [
+                        "{ColorA} {ColorB} {ColorC} {ColorD} {ColorE}",
+                        "the colors are {ColorA} {ColorB} {ColorC} {ColorD} {ColorE}",
+                        "colors {ColorA} {ColorB} {ColorC} {ColorD} {ColorE}"
                     ]
-                },
+                }
+            ],
+            "types": [
                 {
                     "name": "Colors",
                     "values": [
@@ -120,5 +122,5 @@
                 }
             ]
         }
-}
+    }
 }

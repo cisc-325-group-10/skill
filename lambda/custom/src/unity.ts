@@ -1,5 +1,6 @@
 import "source-map-support/register";
 import * as Alexa from 'ask-sdk';
+import { HandlerInput } from "ask-sdk";
 var AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-east-1' });
 var alexaCookbook = require('./alexa-cookbook.js');
@@ -7,19 +8,6 @@ var alexaPlusUnityClass = require('alexaplusunity');
 var alexaPlusUnity = new alexaPlusUnityClass("pub-c-6592a63e-134f-4327-9ed7-b2f36a38b8b2", "sub-c-6ba13e32-38a0-11e9-b5cf-1e59042875b2", true);
 
 const speechOutputs = {
-    launch: {
-        speak: {
-            setup: [
-                " Before we begin playing, we need to go through some setup. I have sent your player ID to your Alexa app. You will need to input this ID in the game when prompted."
-            ],
-            normal: [
-                "Welcome to the Unity Plus Alexa Test!"
-            ],
-        },
-        reprompt: [
-            " What shall we do?"
-        ]
-    },
     errors: {
         speak: [
             "Error!",
@@ -33,10 +21,10 @@ const speechOutputs = {
 };
 
 const LaunchRequestHandler = {
-    canHandle(handlerInput) {
+    canHandle(handlerInput: HandlerInput) {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
-    async handle(handlerInput) {
+    async handle(handlerInput: HandlerInput) {
         const attributesManager = handlerInput.attributesManager;
         const responseBuilder = handlerInput.responseBuilder;
 
@@ -47,8 +35,8 @@ const LaunchRequestHandler = {
             return ErrorHandler.handle(handlerInput, "Error setting attributes... Check logs");
         }
 
-        var reprompt = alexaCookbook.getRandomItem(speechOutputs.launch.reprompt);
-        var speechText = alexaCookbook.getRandomItem(speechOutputs.launch.speak.normal);
+        var reprompt = " What shall we do?";
+        var speechText = "Welcome to the Unity Plus Alexa Test!";
 
         var response = responseBuilder
             .speak(speechText + reprompt)
@@ -56,7 +44,7 @@ const LaunchRequestHandler = {
             .getResponse();
 
         if (attributes.SETUP_STATE == "STARTED") {
-            var launchSetUpResult = await launchSetUp(speechText, reprompt, handlerInput, attributes);
+            var launchSetUpResult = await launchSetUp(reprompt, handlerInput, attributes);
             attributes = launchSetUpResult.attributes;
             response = launchSetUpResult.response;
         }
@@ -67,8 +55,37 @@ const LaunchRequestHandler = {
     }
 };
 
-const InProgressFlipSwitchIntentHandler = {
+
+const StartGameIntentHandler = {
     canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'StartGameIntent';
+    },
+    async handle(handlerInput) {
+
+        const attributes = await handlerInput.attributesManager.getPersistentAttributes()
+        const payloadObj = {
+            type: "StartRequest"
+        };
+
+        const response = await alexaPlusUnity.publishMessageAndListenToResponse(payloadObj, attributes.PUBNUB_CHANNEL, 4000).then((data) => {
+            const speechText = data.message;
+            const reprompt = " What's next?";
+            return handlerInput.responseBuilder
+                .speak(speechText)
+                .reprompt(reprompt)
+                .getResponse();
+        }).catch((err) => {
+            return ErrorHandler.handle(handlerInput, err);
+        });
+
+        return response;
+    }
+}
+
+
+const InProgressFlipSwitchIntentHandler = {
+    canHandle(handlerInput: HandlerInput) {
         const request = handlerInput.requestEnvelope.request;
         return request.type === 'IntentRequest' &&
             request.intent.name === 'FlipSwitchIntent' &&
@@ -251,7 +268,6 @@ const CancelAndStopIntentHandler = {
             .getResponse();
     },
 };
-
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
@@ -284,6 +300,7 @@ const skillBuilder = Alexa.SkillBuilders.standard();
 export const handler = skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
+        StartGameIntentHandler,
         InProgressFlipSwitchIntentHandler,
         CompletetedFlipSwitchIntentHandler,
         InProgressChangeColorIntentHandler,
@@ -300,10 +317,11 @@ export const handler = skillBuilder
     .withAutoCreateTable(true)
     .lambda();
 
-async function launchSetUp(speechText, reprompt, handlerInput, attributes) {
+async function launchSetUp(reprompt, handlerInput, attributes) {
     const responseBuilder = handlerInput.responseBuilder;
 
-    speechText += alexaCookbook.getRandomItem(speechOutputs.launch.speak.setup) + reprompt;
+    let speechText = "Before we begin playing, we would normally need to go through some setup. You would receive a code to enter in the game to connect with the Alexa. For now there is no input screen so it is hardcoded." + reprompt;
+    //let speechText = `<speak> Before we begin playing, we need to go through some setup. Your player ID is  <say-as interpret-as="spell-out">${attributes.PUBNUB_CHANNEL}</say-as>. You will need to input this ID in the game when prompted. ${reprompt} </speak>`
     var response = await alexaPlusUnity.addChannelToGroup(attributes.PUBNUB_CHANNEL, "AlexaPlusUnityTest").then(async (data) => {
         var responseToReturn = responseBuilder
             .speak(speechText)
@@ -338,7 +356,8 @@ async function sendUserId(userId, attributes, handlerInput, response) {
 async function setAttributes(attributes) {
     if (Object.keys(attributes).length === 0) {
         attributes.SETUP_STATE = "STARTED";
-        var newChannel = await alexaPlusUnity.uniqueQueueGenerator("AlexaPlusUnityTest");
+        const newChannel = "XXXXX";
+        //var newChannel = await alexaPlusUnity.uniqueQueueGenerator("AlexaPlusUnityTest");
 
         if (newChannel != null) {
             attributes.PUBNUB_CHANNEL = newChannel;
