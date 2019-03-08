@@ -1,6 +1,7 @@
 'use strict';
 
 const { execSync } = require('child_process');
+const os = require('os');
 
 class Plugin {
     constructor(serverless, options) {

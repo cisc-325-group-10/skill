@@ -7,19 +7,6 @@ var alexaCookbook = require('./alexa-cookbook.js');
 var alexaPlusUnityClass = require('alexaplusunity');
 var alexaPlusUnity = new alexaPlusUnityClass("pub-c-6592a63e-134f-4327-9ed7-b2f36a38b8b2", "sub-c-6ba13e32-38a0-11e9-b5cf-1e59042875b2", true);
 
-const speechOutputs = {
-    errors: {
-        speak: [
-            "Error!",
-            "There was an issue!"
-        ],
-        reprompt: [
-            " Please try again.",
-            " Please try again later."
-        ]
-    },
-};
-
 const LaunchRequestHandler = {
     canHandle(handlerInput: HandlerInput) {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
@@ -98,6 +85,24 @@ const MathGameAnswerIntentHandler = {
     }
 };
 
+const ColorGameAnswerIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'ColorGameAnswer';
+    },
+    async handle(handlerInput) {
+        const slots = handlerInput.requestEnvelope.request.intent.slots;
+        const payload = {
+            type: "ColorGameAnswer",
+            color1: slots.ColorA.value,
+            color2: slots.ColorB.value,
+            color3: slots.ColorC.value,
+            color4: slots.ColorD.value,
+            color5: slots.ColorE.value
+        };
+        return await sendUnityMessage(payload, "What's your answer?", handlerInput);
+    }
+};
 
 const HelpIntentHandler = {
     canHandle(handlerInput) {
@@ -137,6 +142,18 @@ const SessionEndedRequestHandler = {
 };
 
 
+const speechOutputs = {
+    errors: {
+        speak: [
+            "Error!",
+            "There was an issue!"
+        ],
+        reprompt: [
+            " Please try again.",
+            " Please try again later."
+        ]
+    },
+};
 const ErrorHandler = {
     canHandle() {
         return true;
@@ -161,6 +178,7 @@ export const handler = skillBuilder
         StartGameIntentHandler,
         NextGameIntentHandler,
         MathGameAnswerIntentHandler,
+        ColorGameAnswerIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler
