@@ -38,6 +38,20 @@
                     ]
                 },
                 {
+                    "name": "TicTacToeAnswer",
+                    "slots": [
+                        {
+                            "name": "position",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "my anwser is {Answer}",
+                        "answer {Answer}",
+                        "answer is {Answer}"
+                    ]
+                },
+                {
                     "name": "NextGame",
                     "samples": [
                         "move to next game",
