@@ -85,6 +85,18 @@ const MathGameAnswerIntentHandler = {
     }
 };
 
+const TicTacToeIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'TicTacToeAnswer';
+    },
+    async handle(handlerInput) {
+        const answer = handlerInput.requestEnvelope.request.intent.slots.position.value;
+        const payload = { type: "TicTacToeAnswer", position: answer };
+        return await sendUnityMessage(payload, "What's your move?", handlerInput);
+    }
+};
+
 const ColorGameAnswerIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -178,6 +190,7 @@ export const handler = skillBuilder
         StartGameIntentHandler,
         NextGameIntentHandler,
         MathGameAnswerIntentHandler,
+        TicTacToeIntentHandler,
         ColorGameAnswerIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
