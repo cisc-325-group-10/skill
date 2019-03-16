@@ -220,7 +220,7 @@ async function sendUnityMessage(payload: any, reprompt: string | null, handler: 
 async function launchSetUp(reprompt, handlerInput, attributes) {
     const responseBuilder = handlerInput.responseBuilder;
 
-    let speechText = "Before we begin playing, we would normally need to go through some setup. You would receive a code to enter in the game to connect with the Alexa. For now there is no input screen so it is hardcoded." + reprompt;
+    let speechText = "Welcome to the Game! Please say Start Game to begin playing!" + reprompt;
     //let speechText = `<speak> Before we begin playing, we need to go through some setup. Your player ID is  <say-as interpret-as="spell-out">${attributes.PUBNUB_CHANNEL}</say-as>. You will need to input this ID in the game when prompted. ${reprompt} </speak>`
     var response = await alexaPlusUnity.addChannelToGroup(attributes.PUBNUB_CHANNEL, "AlexaPlusUnityTest").then(async (data) => {
         var responseToReturn = responseBuilder
