@@ -46,9 +46,7 @@
                         }
                     ],
                     "samples": [
-                        "my anwser is {Answer}",
-                        "answer {Answer}",
-                        "answer is {Answer}"
+                        "play {position}"
                     ]
                 },
                 {
